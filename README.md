@@ -150,11 +150,7 @@ Start chatting in `index.html`
 <img width="1335" height="693" alt="image" src="https://github.com/user-attachments/assets/cda47408-5f8d-41cc-a65c-56fb48ee7d22" />
 
 ## Demo
-url 
-
-
-*(Add your UI screenshots here)*
-
+url https://drive.google.com/file/d/1wJsAl3yLAOa84v0XgrLH48BFdqaQbk03/view?usp=sharing
 ---
 
 ## Future Improvements
