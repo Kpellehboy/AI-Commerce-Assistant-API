@@ -160,8 +160,10 @@ Start chatting in `index.html`
 ## Author
 
 Elijah M. Flomo
+
 elijahmflomo@gmail.com
-https://github.com/Kpellehboy
+
+
 
 ---
 
