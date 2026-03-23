@@ -143,6 +143,15 @@ Start chatting in `index.html`
 ---
 
 ## Screenshots
+<img width="1266" height="726" alt="image" src="https://github.com/user-attachments/assets/a10f06a7-1aae-431e-8248-11c1ba928100" />
+
+<img width="1361" height="704" alt="image" src="https://github.com/user-attachments/assets/6ab7deb4-1968-4c25-9379-16d1f06b4236" />
+
+<img width="1335" height="693" alt="image" src="https://github.com/user-attachments/assets/cda47408-5f8d-41cc-a65c-56fb48ee7d22" />
+
+## Demo
+url 
+
 
 *(Add your UI screenshots here)*
 
