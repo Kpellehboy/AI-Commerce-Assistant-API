@@ -70,7 +70,7 @@ app.js
 
 ```bash
 # Clone repository
-git clone https://github.com/your-username/ai-commerce-assistant-api.git
+git clone https://github.com/Kpellehboy/AI-Commerce-Assistant-API.git
 
 # Install dependencies
 pnpm install
@@ -160,7 +160,7 @@ Start chatting in `index.html`
 ## Author
 
 Your Name
-[GitHub Profile](https://github.com/your-username)
+https://github.com/Kpellehboy
 
 ---
 
