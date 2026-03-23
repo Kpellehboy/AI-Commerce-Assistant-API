@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>AI Commerce Assistant</title>
+
+  <style>
+    body {
+      font-family: Arial;
+      background: #ece5dd;
+      display: flex;
+      justify-content: center;
+      margin: 0;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 400px;
+      height: 100vh;
+      background: #fff;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .header {
+      background: #075e54;
+      color: white;
+      padding: 15px;
+      font-size: 18px;
+      text-align: center;
+    }
+
+    #chat {
+      flex: 1;
+      padding: 10px;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .message {
+      max-width: 75%;
+      padding: 10px;
+      border-radius: 10px;
+      font-size: 14px;
+      position: relative;
+      white-space: pre-line;
+
+    }
+
+    .user {
+      align-self: flex-end;
+      background: #dcf8c6;
+    }
+
+    .ai {
+      align-self: flex-start;
+      background: #f1f0f0;
+    }
+
+    .time {
+      font-size: 10px;
+      color: gray;
+      margin-top: 5px;
+      text-align: right;
+    }
+
+    .input-area {
+      display: flex;
+      border-top: 1px solid #ccc;
+    }
+
+    input {
+      flex: 1;
+      padding: 12px;
+      border: none;
+      outline: none;
+      font-size: 14px;
+    }
+
+    button {
+      padding: 12px;
+      background: #075e54;
+      color: white;
+      border: none;
+      cursor: pointer;
+    }
+
+    /* Typing animation */
+    .typing {
+      display: flex;
+      gap: 5px;
+    }
+
+    .dot {
+      width: 6px;
+      height: 6px;
+      background: gray;
+      border-radius: 50%;
+      animation: blink 1.4s infinite;
+    }
+
+    .dot:nth-child(2) {
+      animation-delay: 0.2s;
+    }
+
+    .dot:nth-child(3) {
+      animation-delay: 0.4s;
+    }
+
+    @keyframes blink {
+
+      0%,
+      80%,
+      100% {
+        opacity: 0;
+      }
+
+      40% {
+        opacity: 1;
+      }
+    }
+
+    /* Mobile */
+    @media (max-width: 500px) {
+      .container {
+        max-width: 100%;
+        height: 100vh;
+      }
+    }
+  </style>
+
+</head>
+
+<body>
+
+  <div class="container">
+
+    <div class="header">🤖 AI Commerce Assistant</div>
+
+    <div id="chat"></div>
+
+    <div class="input-area">
+      <input id="message" placeholder="Type message..." />
+      <button onclick="sendMessage()">Send</button>
+    </div>
+
+  </div>
+
+  <script>
+    function getTime() {
+      const now = new Date();
+      return now.getHours() + ":" + now.getMinutes().toString().padStart(2, '0');
+    }
+
+    async function sendMessage() {
+      const input = document.getElementById("message");
+      const chat = document.getElementById("chat");
+
+      const message = input.value;
+      if (!message) return;
+
+      // USER MESSAGE
+      const userMsg = document.createElement("div");
+      userMsg.className = "message user";
+      const text = document.createElement("div");
+      text.textContent = message;
+
+      const time = document.createElement("div");
+      time.className = "time";
+      time.textContent = getTime();
+
+      userMsg.appendChild(text);
+      userMsg.appendChild(time);
+      chat.appendChild(userMsg);
+
+      input.value = "";
+
+      // Typing indicator
+      const typing = document.createElement("div");
+      typing.className = "message ai typing";
+      typing.innerHTML = `
+        <div class="dot"></div>
+        <div class="dot"></div>
+        <div class="dot"></div>
+      `;
+      chat.appendChild(typing);
+
+      chat.scrollTop = chat.scrollHeight;
+
+      try {
+        const res = await fetch("http://127.0.0.1:5000/api/chat", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "Authorization":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY5YzE2ZGEwYTViYzAzNjIyY2ZhMmIxMSIsImlhdCI6MTc3NDI4NDIwNCwiZXhwIjoxNzc0MzcwNjA0fQ.wEUJ7CHs5bO79ka7gIwShvSTBt6SKOoIAyBHo8CZyk4" // 🔥 IMPORTANT
+          },
+          body: JSON.stringify({ message })
+        });
+
+        const data = await res.json();
+
+        // remove typing
+        chat.removeChild(typing);
+
+        // AI MESSAGE
+        if (data.reply) {
+          const aiMsg = document.createElement("div");
+          aiMsg.className = "message ai";
+
+          const text = document.createElement("div");
+          text.textContent = data.reply;
+
+          const time = document.createElement("div");
+          time.className = "time";
+          time.textContent = getTime();
+
+          aiMsg.appendChild(text);
+          aiMsg.appendChild(time);
+
+          chat.appendChild(aiMsg);
+        }
+
+        // PRODUCTS
+        if (data.products && data.products.length > 0) {
+          data.products.forEach(p => {
+            const product = document.createElement("div");
+            product.className = "message ai";
+
+            product.innerHTML = `
+               <b>${p.name}</b> - $${p.price}<br>
+              Category: ${p.category} | Stock: ${p.stock}
+              <div class="time">${getTime()}</div>
+            `;
+
+            chat.appendChild(product);
+          });
+        }
+
+      } catch (error) {
+        chat.removeChild(typing);
+
+        const errMsg = document.createElement("div");
+        errMsg.className = "message ai";
+        errMsg.innerHTML = `Server not responding <div class="time">${getTime()}</div>`;
+        chat.appendChild(errMsg);
+      }
+
+      chat.scrollTop = chat.scrollHeight;
+    }
+  </script>
+
+</body>
+
+</html>
