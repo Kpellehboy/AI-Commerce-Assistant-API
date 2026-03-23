@@ -159,7 +159,8 @@ Start chatting in `index.html`
 
 ## Author
 
-Your Name
+Elijah M. Flomo
+elijahmflomo@gmail.com
 https://github.com/Kpellehboy
 
 ---
